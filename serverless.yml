@@ -21,7 +21,7 @@ provider:
 
 functions:
   import:
-    handler: handler.importDBZJsonToDynamodDB
+    handler: importHandler.importDBZJsonToDynamodDB
     events:
       - s3:
           bucket: ${self:provider.environment.S3_DBZ_INPUT_BUCKET}
