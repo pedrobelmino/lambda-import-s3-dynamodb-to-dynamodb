@@ -1,0 +1,29 @@
+service: lambda-import-s3-dynamodb-to-dynamodb
+
+provider:
+  name: aws
+  lambdaHashingVersion: 20201221
+  runtime: nodejs12.x
+  deploymentBucket: belmino.lambda.code.dbz
+  region: us-east-1
+  environment:
+    S3_DBZ_INPUT_BUCKET: belmino.dbz.input
+
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - s3:PutObject
+            - s3:GetObject
+          Resource:
+            - 'arn:aws:s3:::${self:provider.environment.S3_DBZ_INPUT_BUCKET}/*'
+
+functions:
+  import:
+    handler: handler.importDBZJsonToDynamodDB
+    events:
+      - s3:
+          bucket: ${self:provider.environment.S3_DBZ_INPUT_BUCKET}
+          event: s3:ObjectCreated:*
+
