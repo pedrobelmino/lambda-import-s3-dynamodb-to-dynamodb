@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Serverless File import to DynamoDB",
   "repository": "",
-  "author": "Pedro Belmono <pedrobelmino@gmail.com>",
+  "author": "Pedro Belmino <pedrobelmino@gmail.com>",
   "license": "MIT",
   "dependencies": {},
   "devDependencies": {
