@@ -22,7 +22,6 @@ module.exports.importDBZJsonToDynamodDB = (event, context, callback) => {
           console.log('CONTENT TYPE:', data.ContentType);
           console.log('DATA:', data.Body.toString());
           console.log('Iterando');
-          data.Body.forEach(item=>console.log(item));
           callback(null, data.ContentType);
       }
   });

@@ -5,4 +5,4 @@
 - create buckets
 - enable debug > SLS_DEBUG=*
 - generate event > sls generate-event -t aws:s3
-- invoke local 
+- invoke local > sls invoke local --function import -p event/s3-event.json
