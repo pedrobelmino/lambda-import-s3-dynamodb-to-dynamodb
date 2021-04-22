@@ -1,4 +1,4 @@
-service: lambda-import-s3-dynamodb-to-dynamodb
+service: lambda-import-s3-to-dynamodb
 
 provider:
   name: aws
@@ -7,7 +7,8 @@ provider:
   deploymentBucket: belmino.lambda.code.dbz
   region: us-east-1
   environment:
-    S3_DBZ_INPUT_BUCKET: belmino.dbz.input
+    S3_DBZ_INPUT_BUCKET: belmino.dbz.json.input
+    S3_DBZ_PROCESSED_BUCKET: belmino.dbz.json.processed
 
   iam:
     role:
@@ -18,6 +19,7 @@ provider:
             - s3:GetObject
           Resource:
             - 'arn:aws:s3:::${self:provider.environment.S3_DBZ_INPUT_BUCKET}/*'
+            - 'arn:aws:s3:::${self:provider.environment.S3_DBZ_PROCESSED_BUCKET}/*'
 
 functions:
   import:
@@ -27,3 +29,13 @@ functions:
           bucket: ${self:provider.environment.S3_DBZ_INPUT_BUCKET}
           event: s3:ObjectCreated:*
 
+#resources:
+#  Resources:
+#    S3InputBucket:
+#      Type: 'AWS::S3::Bucket'
+#     Properties:
+#      BucketName: ${self:provider.environment.S3_DBZ_INPUT_BUCKET}
+#    S3ProcessedBucket:
+#      Type: 'AWS::S3::Bucket'
+#      Properties:
+#        BucketName: ${self:provider.environment.S3_DBZ_PROCESSED_BUCKET}

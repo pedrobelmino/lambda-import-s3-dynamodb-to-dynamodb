@@ -4,7 +4,7 @@ const aws = require('aws-sdk');
 
 const s3 = new aws.S3({ apiVersion: '2006-03-01' });
 
-module.exports.importDBZJsonToDynamodDB = async (event, context, callback) => {
+module.exports.importDBZJsonToDynamodDB = (event, context, callback) => {
   console.log(event);
   const bucket = event.Records[0].s3.bucket.name;
   const key = decodeURIComponent(event.Records[0].s3.object.key.replace(/\+/g, ' '));
@@ -12,7 +12,6 @@ module.exports.importDBZJsonToDynamodDB = async (event, context, callback) => {
       Bucket: bucket,
       Key: key,
   };
-  console.log()
   s3.getObject(params, (err, data) => {
       if (err) {
           console.log(err);
@@ -21,6 +20,9 @@ module.exports.importDBZJsonToDynamodDB = async (event, context, callback) => {
           callback(message);
       } else {
           console.log('CONTENT TYPE:', data.ContentType);
+          console.log('DATA:', data.Body.toString());
+          console.log('Iterando');
+          data.Body.forEach(item=>console.log(item));
           callback(null, data.ContentType);
       }
   });
