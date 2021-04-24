@@ -1,6 +1,9 @@
 'use strict';
 
+const uuid = require('uuid');
 const aws = require('aws-sdk');
+const uuid = require('uuid');
+const dynamodb = require('./dynamodb');
 
 const s3 = new aws.S3({ apiVersion: '2006-03-01' });
 
@@ -19,9 +22,24 @@ module.exports.importDBZJsonToDynamodDB = (event, context, callback) => {
           console.log(message);
           callback(message);
       } else {
-          console.log('CONTENT TYPE:', data.ContentType);
-          console.log('DATA:', data.Body.toString());
-          console.log('Iterando');
+          var charactersArray = JSON.parse(data.Body.toString())['characters'];
+          charactersArray.forEach(element => {
+            const timestamp = new Date().getTime();
+            const paramsDb = {
+              TableName: process.env.DYNAMODB_TABLE,
+              Item: {
+                name: element.id,
+                id: uuid.v1()
+              },
+            };
+            dynamodb.put(paramsDb, (error) => {
+              // handle potential errors
+              if (error) {
+                console.error(error);
+              }
+            })
+
+          });
           callback(null, data.ContentType);
       }
   });

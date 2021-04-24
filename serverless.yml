@@ -1,14 +1,17 @@
-service: lambda-import-s3-to-dynamodb
+service: import-s3-to-dynamodb
+
+frameworkVersion: '2'
 
 provider:
   name: aws
   lambdaHashingVersion: 20201221
   runtime: nodejs12.x
-  deploymentBucket: belmino.lambda.code.dbz
   region: us-east-1
+  stage: dev
   environment:
-    S3_DBZ_INPUT_BUCKET: belmino.dbz.json.input
-    S3_DBZ_PROCESSED_BUCKET: belmino.dbz.json.processed
+    S3_DBZ_INPUT_BUCKET: belmino.dbz.s3.jsoninput
+    S3_DBZ_PROCESSED_BUCKET: belmino.dbz.s3.jsonprocessed
+    DYNAMODB_TABLE: belmino.dbz.dynamodb
 
   iam:
     role:
@@ -20,7 +23,17 @@ provider:
           Resource:
             - 'arn:aws:s3:::${self:provider.environment.S3_DBZ_INPUT_BUCKET}/*'
             - 'arn:aws:s3:::${self:provider.environment.S3_DBZ_PROCESSED_BUCKET}/*'
+        - Effect: Allow
+          Action:
+            - dynamodb:Query
+            - dynamodb:Scan
+            - dynamodb:GetItem
+            - dynamodb:PutItem
+            - dynamodb:UpdateItem
+            - dynamodb:DeleteItem
+          Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.DYNAMODB_TABLE}"
 
+       
 functions:
   import:
     handler: importHandler.importDBZJsonToDynamodDB
@@ -28,14 +41,28 @@ functions:
       - s3:
           bucket: ${self:provider.environment.S3_DBZ_INPUT_BUCKET}
           event: s3:ObjectCreated:*
+          
 
-#resources:
-#  Resources:
-#    S3InputBucket:
-#      Type: 'AWS::S3::Bucket'
-#     Properties:
-#      BucketName: ${self:provider.environment.S3_DBZ_INPUT_BUCKET}
-#    S3ProcessedBucket:
-#      Type: 'AWS::S3::Bucket'
-#      Properties:
-#        BucketName: ${self:provider.environment.S3_DBZ_PROCESSED_BUCKET}
+resources:
+  Resources:
+    S3ProcessedBucket:
+      Type: 'AWS::S3::Bucket'
+      Properties:
+        BucketName: ${self:provider.environment.S3_DBZ_PROCESSED_BUCKET}
+    DynamodDBZTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+          - AttributeName: name
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+          - AttributeName: name
+            KeyType: RANGE 
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: ${self:provider.environment.DYNAMODB_TABLE}
