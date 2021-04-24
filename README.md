@@ -5,6 +5,7 @@
 - enable debug > SLS_DEBUG=*
 - generate event > sls generate-event -t aws:s3
 - Testar processamento > aws s3 sync data/ s3://belmino.dbz.s3.jsoninput
+- aws dynamodb scan --table-name belmino.dbz.dynamodb
 
 
 TODO
