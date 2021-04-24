@@ -11,3 +11,14 @@
 TODO
 - invoke local > sls invoke local --function import -p event/s3-event.json
 -- Fazer funcionar dynamodb local
+
+
+links para monitorar recursos
+https://s3.console.aws.amazon.com/s3/home?region=us-east-1
+https://console.aws.amazon.com/dynamodb/home?region=us-east-1
+https://console.aws.amazon.com/cloudformation/home?region=us-east-1
+https://console.aws.amazon.com/cloudwatch/home?region=us-east-1
+https://console.aws.amazon.com/lambda/home?region=us-east-1#/functions
+
+
+

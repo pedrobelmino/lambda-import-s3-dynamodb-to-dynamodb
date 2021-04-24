@@ -23,13 +23,22 @@ module.exports.importDBZJsonToDynamodDB = (event, context, callback) => {
         TableName: process.env.DYNAMODB_TABLE,
         Item: {
           name: element.id,
-          id: uuid.v1()
+          id: uuid.v1(),
+          race: element.race,
+          gender: element.gender,
+          bio: element.bio,
+          health: element.health,
+          attack: element.attack,
+          defense: element.defense,
+          kiRestoreSpeed: element.kiRestoreSpeed
         },
       };
-      dynamodb.put(paramsDb);
-
+      dynamodb.put(paramsDb, (error) => {
+        if (error) {
+          console.log(error);
+        }
+      });
     });
     callback(null, data.ContentType);
   });
-  
 };
