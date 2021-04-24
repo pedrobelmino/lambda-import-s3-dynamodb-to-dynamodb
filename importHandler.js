@@ -2,7 +2,6 @@
 
 const uuid = require('uuid');
 const aws = require('aws-sdk');
-const uuid = require('uuid');
 const dynamodb = require('./dynamodb');
 
 const s3 = new aws.S3({ apiVersion: '2006-03-01' });
