@@ -8,7 +8,7 @@ language: nodeJS
 authorLink: 'https://github.com/pedrobelmino'
 authorName: 'Pedro Belmino'
 -->
-# Função lambda simples para importar json do desenho Dragon Ball Z
+# Função lambda simples para importar json do desenho Dragon Ball Z para o DynamoDB
 
 Esse exemplo demonstra como processar arquivos do tipo json, armazenados em bucket S3 e persistir os dados em uma base DynamodDB
 
