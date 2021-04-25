@@ -63,9 +63,7 @@ layers:
 
 ## Uso
 
-- Faça o upload do arquivo data/dbz.json para o bucket configurado no enviroment S3_DBZ_INPUT_BUCKET.
-
-Você pode fazer isso através do comando abaixo.
+- Faça o upload do arquivo data/dbz.json para o bucket configurado no enviroment S3_DBZ_INPUT_BUCKET. Você pode fazer isso através do comando abaixo.
 ```bash
 aws s3 sync data/ s3://belmino.dbz.s3.jsoninput
 ```
